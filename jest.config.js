@@ -5,7 +5,11 @@
 
 module.exports = {
 
-  collectCoverageFrom: ['<rootDir>/src/**/*.ts'],
+  collectCoverageFrom: [
+    '<rootDir>/src/**/*.ts',
+    '!<rootDir>/src/**/*-protocols.ts',
+    '!**/protocols/**'
+  ],
 
   coverageDirectory: 'coverage',
 
@@ -15,7 +19,7 @@ module.exports = {
   // ],
 
   // Indicates which provider should be used to instrument code for coverage
-  // coverageProvider: "babel",
+  coverageProvider: 'babel',
 
   // A list of reporter names that Jest uses when writing coverage reports
   // coverageReporters: [
