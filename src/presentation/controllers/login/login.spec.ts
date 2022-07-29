@@ -127,7 +127,7 @@ describe('Login Controller', () => {
     expect(httpResponse).toEqual(serverError(new Error()))
   })
 
-  it('should return 500 if Authentication throws', async () => {
+  it('should return 200 if valid credentials are provided', async () => {
     const { sut } = makeSut()
 
     const httpResponse = await sut.handle(makeHttpRequest())
