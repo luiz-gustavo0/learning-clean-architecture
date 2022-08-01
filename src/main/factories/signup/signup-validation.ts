@@ -9,7 +9,7 @@ import {
 import {
   ValidationComposite
 } from '../../../presentation/helpers/validators/validation-composite'
-import { Validation } from '../../../presentation/helpers/validators/validaton'
+import { Validation } from '../../../presentation/protocols/validaton'
 import { EmailValidatorAdapter } from '../../../utils/email-validator-adapter'
 
 export const makeSignUpValidation = (): ValidationComposite => {

@@ -5,7 +5,7 @@ import {
 import {
   ValidationComposite
 } from '../../../presentation/helpers/validators/validation-composite'
-import { Validation } from '../../../presentation/helpers/validators/validaton'
+import { Validation } from '../../../presentation/protocols/validaton'
 import { EmailValidator } from '../../../presentation/protocols/email-validator'
 import { makeLoginValidation } from './login-validation'
 
