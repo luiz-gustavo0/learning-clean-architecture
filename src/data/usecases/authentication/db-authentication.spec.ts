@@ -1,4 +1,5 @@
 import { AuthenticationModel } from '../../../domain/usecases/autentication'
+import { HashComparer } from '../../protocols/criptography/hash-comparer'
 import {
   LoadAccountByEmailRepository
 } from '../../protocols/db/load-account-by-email-repository'
@@ -10,7 +11,7 @@ const makeFakeAccout = (): AccountModel => {
     id: 'any_id',
     name: 'any_name',
     email: 'any_email@email.com',
-    password: 'any_password'
+    password: 'hashed_password'
   }
 }
 
@@ -27,16 +28,27 @@ const makeLoadAccountByEmailRepository = (): LoadAccountByEmailRepository => {
   }
   return new LoadAccountByEmailRepositoryStub()
 }
+
+const makeHashComparer = (): HashComparer => {
+  class HashComparerStub implements HashComparer {
+    async comparer (value: string, hash: string): Promise<boolean> {
+      return await new Promise(resolve => resolve(true))
+    }
+  }
+  return new HashComparerStub()
+}
 interface SutTypes {
   sut: DbAuthentication
   loadAccountByEmailRepositoryStub: LoadAccountByEmailRepository
+  hashComparerSutb: HashComparer
 }
 
 const makeSut = (): SutTypes => {
   const loadAccountByEmailRepositoryStub = makeLoadAccountByEmailRepository()
-  const sut = new DbAuthentication(loadAccountByEmailRepositoryStub)
+  const hashComparerSutb = makeHashComparer()
+  const sut = new DbAuthentication(loadAccountByEmailRepositoryStub, hashComparerSutb)
 
-  return { sut, loadAccountByEmailRepositoryStub }
+  return { sut, loadAccountByEmailRepositoryStub, hashComparerSutb }
 }
 
 describe('DbAuthentication', () => {
@@ -61,5 +73,12 @@ describe('DbAuthentication', () => {
     jest.spyOn(loadAccountByEmailRepositoryStub, 'load').mockReturnValueOnce(null)
     const accessToken = await sut.auth(makeFakeAuthentication())
     expect(accessToken).toBeNull()
+  })
+
+  it('should call hashCompare with correct values', async () => {
+    const { sut, hashComparerSutb } = makeSut()
+    const comapreSpy = jest.spyOn(hashComparerSutb, 'comparer')
+    await sut.auth(makeFakeAuthentication())
+    expect(comapreSpy).toHaveBeenCalledWith('any_password', 'hashed_password')
   })
 })
