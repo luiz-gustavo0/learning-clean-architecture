@@ -21,7 +21,7 @@ const makeEmailValidator = (): EmailValidator => {
   return new EmailValidatorStub()
 }
 
-describe('SignUpValidation Factory', () => {
+describe('LoginValidation Factory', () => {
   it('should call ValidationComposite with all validations', () => {
     makeLoginValidation()
     const validations: Validation[] = []
